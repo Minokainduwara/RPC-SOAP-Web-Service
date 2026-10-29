@@ -11,6 +11,21 @@ import jakarta.xml.ws.Endpoint;
 
 )
 
-public class HelloWorldServer {
-    
+public class HelloWorldServer implements HelloWorldServerInterface {
+
+    @Override
+    public String sayHello() {
+        return "Hello, World!";
+    }
+
+    public static void main(String[] args) {
+        String address = "http://localhost:8080/HelloWorld";
+        Endpoint endpoint = Endpoint.publish(address, new HelloWorldServer());
+
+        System.out.println("SOAP service published at: " + address);
+        System.out.println("WSDL available at: " + address + "?wsdl");
+        System.out.println("Press Ctrl+C to stop the service.");
+
+        Runtime.getRuntime().addShutdownHook(new Thread(endpoint::stop));
+    }
 }
